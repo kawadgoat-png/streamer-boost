@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamerBoost - Générateur de Contenu pour Créateurs</title>
+    <!-- Tailwind CSS pour un design propre et rapide -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between">
+
+    <!-- En-tête -->
+    <header class="p-6 border-b border-slate-800 flex justify-between items-center max-w-4xl mx-auto w-full">
+        <h1 class="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">StreamerBoost 🚀</h1>
+        <span class="text-xs bg-purple-900/50 text-purple-300 px-3 py-1 rounded-full border border-purple-700">Outil Micro-SaaS</span>
+    </header>
+
+    <!-- Contenu Principal -->
+    <main class="max-w-xl mx-auto p-6 w-full flex-grow flex flex-col justify-center">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+            <h2 class="text-2xl font-semibold mb-2">Générateur de Bio & Accroche</h2>
+            <p class="text-slate-400 text-sm mb-6">Créez instantanément une bio pro pour vos réseaux ou votre chaîne.</p>
+
+            <!-- Formulaire -->
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium uppercase tracking-wider text-slate-400 mb-1">Votre Nom / Pseudo</label>
+                    <input type="text" id="streamerName" placeholder="ex: AlexStream" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-sm focus:outline-none focus:border-purple-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium uppercase tracking-wider text-slate-400 mb-1">Votre Jeu ou Thématique principale</label>
+                    <input type="text" id="gameTheme" placeholder="ex: Valorant / Minecraft / Just Chatting" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-sm focus:outline-none focus:border-purple-500">
+                </div>
+                <button onclick="generateBio()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-90 text-white font-medium py-3 rounded-lg transition shadow-lg shadow-purple-900/20">
+                    Générer ma Bio ⚡
+                </button>
+            </div>
+
+            <!-- Résultat -->
+            <div id="resultBox" class="mt-6 hidden">
+                <label class="block text-xs font-medium uppercase tracking-wider text-slate-400 mb-1">Résultat généré :</label>
+                <div id="output" class="bg-slate-950 border border-slate-800 rounded-lg p-4 text-sm text-purple-200 select-all"></div>
+            </div>
+        </div>
+
+        <!-- Encadré Monétisation / Appel à l'action payant -->
+        <div class="mt-6 bg-gradient-to-r from-purple-950/40 to-pink-950/40 border border-purple-900/50 rounded-xl p-4 text-center">
+            <p class="text-sm font-medium mb-2">Besoin d'un pack complet d'overlays et de plannings automatiques ?</p>
+            <a href="https://gumroad.com" target="_blank" class="inline-block bg-white text-slate-950 text-xs font-bold px-4 py-2 rounded-lg hover:bg-slate-200 transition">
+                Débloquer la version Pro (9 €)
+            </a>
+        </div>
+    </main>
+
+    <!-- Pied de page -->
+    <footer class="text-center p-4 text-xs text-slate-600 border-t border-slate-900">
+        Prêt à être déployé sur GitHub Pages ou Vercel.
+    </footer>
+
+    <!-- Logique JavaScript de l'outil -->
+    <script>
+        function generateBio() {
+            const name = document.getElementById('streamerName').value.trim();
+            const theme = document.getElementById('gameTheme').value.trim();
+            const outputDiv = document.getElementById('output');
+            const resultBox = document.getElementById('resultBox');
+
+            if (!name || !theme) {
+                alert("Veuillez remplir tous les champs !");
+                return;
+            }
+
+            // Génération d'une bio dynamique simple
+            const bios = [
+                `🎮 Bienvenue chez ${name} ! Spécialiste de ${theme}. Abonne-toi pour ne rien rater des sessions épiques ! 🔥`,
+                `✨ ${name} | En direct sur ${theme}. Viens chill, progresse et rejoins la commu ! 🚀`,
+                `🏆 ${name} - Le repaire des fans de ${theme}. Du skill, de la bonne humeur et du contenu exclusif 🎯`
+            ];
+
+            const randomBio = bios[Math.floor(Math.random() * bios.length)];
+            
+            outputDiv.textContent = randomBio;
+            resultBox.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
