@@ -3,85 +3,418 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StreamerBoost - Générateur de Contenu pour Créateurs</title>
-    <!-- Tailwind CSS pour un design propre et rapide -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>StreamerBoost Pro - Le Kit Ultime</title>
+    <style>
+        :root {
+            --bg-dark: #080510;
+            --card-bg: #130f28;
+            --accent-purple: #9333ea;
+            --accent-blue: #3b82f6;
+            --neon-glow: 0 0 20px rgba(147, 51, 234, 0.5);
+            --text-main: #ffffff;
+            --text-muted: #a5b4fc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            background-image: radial-gradient(circle at 25% 10%, #1a162d 1px, transparent 1px),
+                              radial-gradient(circle at 75% 90%, #1a162d 1px, transparent 1px);
+            background-size: 50px 50px;
+            padding: 60px 20px;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(147, 51, 234, 0.15) 0%, transparent 60%);
+            z-index: -1;
+            animation: pulse 10s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #ffffff 0%, #a855f7 50%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 5px rgba(168, 85, 247, 0.5));
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            border-radius: 16px;
+            padding: 40px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.27);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-purple);
+            box-shadow: var(--neon-glow);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-purple), transparent);
+            transition: left 0.5s;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 25px;
+            background: linear-gradient(to bottom right, var(--accent-purple), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--text-main);
+        }
+
+        .card p {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 18px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--accent-purple), #7e22ce);
+            color: white;
+            box-shadow: 0 4px 15px rgba(126, 34, 206, 0.4);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #7e22ce, var(--accent-purple));
+            box-shadow: 0 6px 20px rgba(126, 34, 206, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* --- Modales --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: #1a162d;
+            border: 2px solid var(--accent-purple);
+            border-radius: 16px;
+            padding: 40px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .modal-close:hover { color: white; }
+
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: var(--accent-purple);
+            border-bottom: 1px solid rgba(147, 51, 234, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .generated-text {
+            white-space: pre-line;
+            color: var(--text-main);
+            font-size: 1rem;
+            background: #080510;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 100px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 2.5rem; }
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between">
+<body>
 
-    <!-- En-tête -->
-    <header class="p-6 border-b border-slate-800 flex justify-between items-center max-w-4xl mx-auto w-full">
-        <h1 class="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">StreamerBoost 🚀</h1>
-        <span class="text-xs bg-purple-900/50 text-purple-300 px-3 py-1 rounded-full border border-purple-700">Outil Micro-SaaS</span>
-    </header>
+    <div class="container">
+        <header>
+            <h1>StreamerBoost Pro</h1>
+            <p>Propulsez votre chaîne avec notre kit d'outils professionnels.</p>
+        </header>
 
-    <!-- Contenu Principal -->
-    <main class="max-w-xl mx-auto p-6 w-full flex-grow flex flex-col justify-center">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
-            <h2 class="text-2xl font-semibold mb-2">Générateur de Bio & Accroche</h2>
-            <p class="text-slate-400 text-sm mb-6">Créez instantanément une bio pro pour vos réseaux ou votre chaîne.</p>
-
-            <!-- Formulaire -->
-            <div class="space-y-4">
+        <div class="grid">
+            <!-- Bloc 1 : Bios -->
+            <div class="card">
                 <div>
-                    <label class="block text-xs font-medium uppercase tracking-wider text-slate-400 mb-1">Votre Nom / Pseudo</label>
-                    <input type="text" id="streamerName" placeholder="ex: AlexStream" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-sm focus:outline-none focus:border-purple-500">
+                    <div class="card-icon">⚡</div>
+                    <h2>Générateur de bios stratégiques</h2>
+                    <p>Ne perdez plus de temps. Obtenez des descriptions percutantes taillées pour convertir vos viewers.</p>
                 </div>
-                <div>
-                    <label class="block text-xs font-medium uppercase tracking-wider text-slate-400 mb-1">Votre Jeu ou Thématique principale</label>
-                    <input type="text" id="gameTheme" placeholder="ex: Valorant / Minecraft / Just Chatting" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-sm focus:outline-none focus:border-purple-500">
-                </div>
-                <button onclick="generateBio()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-90 text-white font-medium py-3 rounded-lg transition shadow-lg shadow-purple-900/20">
-                    Générer ma Bio ⚡
-                </button>
+                <button class="btn btn-primary" onclick="openModal('modalBios')">Générer un texte</button>
             </div>
 
-            <!-- Résultat -->
-            <div id="resultBox" class="mt-6 hidden">
-                <label class="block text-xs font-medium uppercase tracking-wider text-slate-400 mb-1">Résultat généré :</label>
-                <div id="output" class="bg-slate-950 border border-slate-800 rounded-lg p-4 text-sm text-purple-200 select-all"></div>
+            <!-- Bloc 2 : Kit Graphique (Interactif) -->
+            <div class="card">
+                <div>
+                    <div class="card-icon">🎨</div>
+                    <h2>Kit graphique d'élite</h2>
+                    <p>Designs épurés, modernes et aux accents néons pour habiller votre chaîne instantanément.</p>
+                </div>
+                <button class="btn btn-primary" onclick="openModal('modalGraphique')">Accéder aux designs</button>
+            </div>
+
+            <!-- Bloc 3 : Planning -->
+            <div class="card">
+                <div>
+                    <div class="card-icon">📈</div>
+                    <h2>Planning & Stratégie de Live</h2>
+                    <p>Dupliquez nos plannings optimisés pour fidéliser votre communauté et maximiser vos audiences.</p>
+                </div>
+                <button class="btn btn-primary" onclick="openModal('modalPlanning')">Générer le planning</button>
             </div>
         </div>
 
-        <!-- Encadré Monétisation / Appel à l'action payant -->
-        <div class="mt-6 bg-gradient-to-r from-purple-950/40 to-pink-950/40 border border-purple-900/50 rounded-xl p-4 text-center">
-            <p class="text-sm font-medium mb-2">Besoin d'un pack complet d'overlays et de plannings automatiques ?</p>
-            <a href="https://gumroad.com" target="_blank" class="inline-block bg-white text-slate-950 text-xs font-bold px-4 py-2 rounded-lg hover:bg-slate-200 transition">
-                Débloquer la version Pro (9 €)
-            </a>
+        <footer>
+            <p>&copy; 2026 StreamerBoost Pro. Tous droits réservés.</p>
+            <p style="font-size: 0.8rem; margin-top: 5px;">Le contenu de ce site est réservé aux acheteurs.</p>
+        </footer>
+    </div>
+
+    <!-- --- Modale Bios --- -->
+    <div class="modal-overlay" id="modalBios">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('modalBios')">&times;</button>
+            <h2 class="modal-title">Modèles de Bios Stratégiques</h2>
+            <div class="generated-text">🚀 **StreamerBoost Pro — Kit de Bios Stratégiques**
+
+Bienvenue dans votre guide de bios optimisées. Une bonne bio doit accrocher l'œil en moins de 3 secondes, montrer votre valeur et inciter à s'abonner.
+
+### 1. Modèles de Bios pour Twitch (Profil & Panneaux)
+**Option 1 : Professionnel & Accrocheur (Idéal pour la croissance)**
+> **[Votre Prénom] | [Votre Type de Jeu / Contenu principal]**
+> 🔥 Du divertissement, de la technique et de la bonne humeur.
+> 📌 **Planning :** Lundi, Mercredi et Vendredi à 20h30.
+> 💬 Rejoins notre communauté sur Discord ! 👇
+
+**Option 2 : Court & Percutant (Minimaliste)**
+> 🎮 Streamer passionné & compétitif.
+> ⚡ Objectif : Faire de chaque live un moment unique.
+> 📩 Contact pro : [Votre Email]
+
+### 2. Modèles de Bios pour TikTok / Shorts / Reels
+**Option 3 : Axé sur l'humour / Divertissement**
+> 🔴 En live tous les soirs sur Twitch !
+> 💀 Mes pires moments de galère en jeu c'est ici.
+> 👇 Viens voir le massacre : [Votre Lien Twitch]
+
+**Option 4 : Axé sur la performance / Gaming**
+> 🏆 Top [Votre Niveau/Rang] sur [Nom du Jeu]
+> 🚀 Tips, clips et gros play chaque semaine.
+> 🔗 Mon setup & mes réseaux : [Votre Lien]
+
+### 3. Astuces d'optimisation
+* **Émojis stratégiques :** Guident le regard vers les informations clés.
+* **Appel à l'action (CTA) :** Dites clairement quoi faire ("Abonne-toi").
+* **Régularité :** Affichez vos horaires de live clairement.</div>
         </div>
-    </main>
+    </div>
 
-    <!-- Pied de page -->
-    <footer class="text-center p-4 text-xs text-slate-600 border-t border-slate-900">
-        Prêt à être déployé sur GitHub Pages ou Vercel.
-    </footer>
+    <!-- --- Modale Kit Graphique --- -->
+    <div class="modal-overlay" id="modalGraphique">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('modalGraphique')">&times;</button>
+            <h2 class="modal-title">Kit Graphique d'Élite & Overlays</h2>
+            <div class="generated-text">🎨 **StreamerBoost Pro — Guide du Kit Graphique**
 
-    <!-- Logique JavaScript de l'outil -->
+Donnez une identité visuelle unique et pro à votre chaîne en quelques clics. 
+
+### 📁 Éléments Inclus dans le Pack :
+1. **Bannière de Profil (1200 x 480 px) :** Format optimisé pour Twitch, YouTube et Kick avec un style néon violet.
+2. **Panneaux de description (320px de large) :** Séries de boutons prêts à l'emploi (À propos, Règles, Setup, Don, Discord).
+3. **Overlays de Stream :** Écrans de transition "Starting Soon", "Be Right Back" et "Stream Offline" assortis.
+
+### 🔗 Liens de Téléchargement Direct :
+* **Télécharger le dossier complet (.ZIP) :** [Insérer votre lien Google Drive / Mega ici]
+* **Fichiers sources modifiables (Canva / Photoshop) :** [Insérer votre lien ici]
+
+### 🛠️ Comment les installer sur Twitch :
+1. Allez sur votre chaîne Twitch > **À propos** > Activez "Modifier les panneaux".
+2. Ajoutez une image de panneau et reliez-la au lien de votre choix.
+3. Importez vos écrans d'attente directement dans OBS Studio en créant une source "Image" ou "Média".</div>
+        </div>
+    </div>
+
+    <!-- --- Modale Planning --- -->
+    <div class="modal-overlay" id="modalPlanning">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('modalPlanning')">&times;</button>
+            <h2 class="modal-title">Planning Type & Stratégie de Diffusion</h2>
+            <div class="generated-text">📅 **StreamerBoost Pro — Planning & Semaine Type**
+
+Un bon planning garantit une audience fidèle. Voici la structure idéale testée et approuvée pour exploser sur Twitch :
+
+### 🗓️ Semaine Type Recommandée (3 Sessions / Semaine)
+
+* **Lundi (19h00 - 23h00) : Le Grand Rendez-vous**
+  * *Objectif :* Attrapez les spectateurs en début de semaine. 
+  * *Contenu :* Jeu principal du moment / Aventure / Découverte de nouveauté.
+
+* **Mercredi (20h00 - 00h00) : Session Chill / Communauté**
+  * *Objectif :* Créer de la proximité et discuter avec le tchat.
+  * *Contenu :* Jeux multijoueurs avec les abonnés, FAQ, ou concepts originaux.
+
+* **Vendredi (21h00 - Fin de soirée) : Le Prime / Climax**
+  * *Objectif :* Profiter du week-end pour faire de plus longues sessions.
+  * *Contenu :* Mode compétitif (Ranked), défis corsés ou événement spécial.
+
+---
+
+### 💡 3 Règles d'Or pour Réussir son Planning :
+1. **La Cohérence :** Commencez toujours à la même heure. La régularité bat la quantité.
+2. **L'Annonce Réseaux :** Publiez votre planning chaque dimanche sur vos réseaux (TikTok, X, Instagram, Discord).
+3. **Le Repos :** Ne streamez pas 7j/7, l'épuisement (burnout) tue la créativité. Gardez 2 à 3 soirs off pour préparer vos contenus.</div>
+        </div>
+    </div>
+
+    <!-- --- Scripts JavaScript --- -->
     <script>
-        function generateBio() {
-            const name = document.getElementById('streamerName').value.trim();
-            const theme = document.getElementById('gameTheme').value.trim();
-            const outputDiv = document.getElementById('output');
-            const resultBox = document.getElementById('resultBox');
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
 
-            if (!name || !theme) {
-                alert("Veuillez remplir tous les champs !");
-                return;
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                event.target.classList.remove('active');
+                document.body.style.overflow = '';
             }
-
-            // Génération d'une bio dynamique simple
-            const bios = [
-                `🎮 Bienvenue chez ${name} ! Spécialiste de ${theme}. Abonne-toi pour ne rien rater des sessions épiques ! 🔥`,
-                `✨ ${name} | En direct sur ${theme}. Viens chill, progresse et rejoins la commu ! 🚀`,
-                `🏆 ${name} - Le repaire des fans de ${theme}. Du skill, de la bonne humeur et du contenu exclusif 🎯`
-            ];
-
-            const randomBio = bios[Math.floor(Math.random() * bios.length)];
-            
-            outputDiv.textContent = randomBio;
-            resultBox.classList.remove('hidden');
         }
     </script>
+
 </body>
 </html>
